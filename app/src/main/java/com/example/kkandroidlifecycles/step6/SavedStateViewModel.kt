@@ -17,18 +17,24 @@ package com.example.kkandroidlifecycles.step6
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 
-class SavedStateViewModel : ViewModel() {
-    // TODO: Create constructor and use the LiveData from SavedStateHandle.
-    internal val name = MutableLiveData<String>()
+class SavedStateViewModel(private val mState: SavedStateHandle) : ViewModel() {
+
+    private val NAME_KEY = "name"
 
     // Expose an immutable LiveData
-    fun getName(): LiveData<String> {
-        return name
+    fun getName(): LiveData<String?>? {
+        // getLiveData obtains an object that is associated with the key wrapped in a LiveData
+        // so it can be observed for changes.
+        return mState.getLiveData(NAME_KEY)
     }
 
-    fun saveNewName(newName: String) {
-        name.value = newName
+    fun saveNewName(newName: String?) {
+        // Sets a new value for the object associated to the key. There's no need to set it
+        // as a LiveData.
+        mState.set(NAME_KEY, newName)
     }
+
 }

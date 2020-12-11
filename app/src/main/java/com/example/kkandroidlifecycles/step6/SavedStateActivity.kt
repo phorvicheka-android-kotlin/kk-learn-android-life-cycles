@@ -27,7 +27,8 @@ import com.example.kkandroidlifecycles.R
  * Shows a simple form with a button and displays the value of a property in a ViewModel.
  */
 class SavedStateActivity : AppCompatActivity() {
-    private var mSavedStateViewModel: SavedStateViewModel? = null
+    lateinit var mSavedStateViewModel: SavedStateViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.saved_state_activity)
@@ -36,7 +37,7 @@ class SavedStateActivity : AppCompatActivity() {
         mSavedStateViewModel = ViewModelProvider(this).get(SavedStateViewModel::class.java)
 
         // Show the ViewModel property's value in a TextView
-        mSavedStateViewModel!!.name.observe(
+        mSavedStateViewModel.getName()?.observe(
             this,
             { savedString ->
                 (findViewById<View>(R.id.saved_vm_tv) as TextView).text =
@@ -46,7 +47,7 @@ class SavedStateActivity : AppCompatActivity() {
         // Save button
         findViewById<View>(R.id.save_bt).setOnClickListener {
             val newName = (findViewById<View>(R.id.name_et) as EditText).text.toString()
-            mSavedStateViewModel!!.saveNewName(newName)
+            mSavedStateViewModel.saveNewName(newName)
         }
     }
 }
