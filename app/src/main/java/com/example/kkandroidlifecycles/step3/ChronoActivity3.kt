@@ -45,6 +45,7 @@ class ChronoActivity3 : AppCompatActivity() {
             Log.d("ChronoActivity3", "Updating timer")
         }
 
-        //TODO: observe the ViewModel's elapsed time
+        // observe the ViewModel's elapsed time
+        mLiveDataTimerViewModel?.elapsedTime?.observe(this, elapsedTimeObserver)
     }
 }
