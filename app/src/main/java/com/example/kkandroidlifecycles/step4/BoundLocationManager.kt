@@ -15,38 +15,44 @@
  */
 package com.example.kkandroidlifecycles.step4
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.pm.PackageManager
 import android.location.LocationListener
 import android.location.LocationManager
 import android.util.Log
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import java.util.*
+import androidx.lifecycle.OnLifecycleEvent
 
 object BoundLocationManager {
     @JvmStatic
     fun bindLocationListenerIn(
-        lifecycleOwner: LifecycleOwner?,
-        listener: LocationListener, context: Context
+        lifecycleOwner: LifecycleOwner,
+        listener: LocationListener,
+        context: Context
     ) {
         BoundLocationListener(lifecycleOwner, listener, context)
     }
 
-    internal class BoundLocationListener     //TODO: Add lifecycle observer
-        (
-        lifecycleOwner: LifecycleOwner?,
+    @SuppressLint("MissingPermission")
+    internal class BoundLocationListener(
+        lifecycleOwner: LifecycleOwner,
         private val mListener: LocationListener,
         private val mContext: Context
     ) : LifecycleObserver {
         private var mLocationManager: LocationManager? = null
 
-        //TODO: Call this on resume
-        @SuppressLint("MissingPermission")
+        init {
+            /**
+             * The magic happens here, we are indicating we want our BoundLocationListener
+             * instance to be notified of the state changes of this LifecycleOwner
+             */
+            lifecycleOwner.lifecycle.addObserver(this)
+        }
+
+        // Call this on resume
+        @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
         fun addLocationListener() {
             // Note: Use the Fused Location Provider from Google Play Services instead.
             // https://developers.google.com/android/reference/com/google/android/gms/location/FusedLocationProviderApi
@@ -69,7 +75,8 @@ object BoundLocationManager {
             }
         }
 
-        //TODO: Call this on pause
+        // Call this on pause
+        @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
         fun removeLocationListener() {
             if (mLocationManager == null) {
                 return

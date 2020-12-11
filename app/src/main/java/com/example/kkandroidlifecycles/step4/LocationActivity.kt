@@ -24,7 +24,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import com.example.kkandroidlifecycles.R
 import java.util.*
 
@@ -120,7 +119,7 @@ class LocationActivity : AppCompatActivity() {
     }
 
     private fun bindLocationListener() {
-        BoundLocationManager.bindLocationListenerIn(this, mGpsListener, getApplicationContext())
+        BoundLocationManager.bindLocationListenerIn(this, mGpsListener, applicationContext)
     }
 
     private inner class MyLocationListener : LocationListener {
